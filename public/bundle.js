@@ -72,14 +72,16 @@
 
 var _redux = __webpack_require__(8);
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 // Defining reducers
 var reducer = function reducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
   var action = arguments[1];
 
   switch (action.type) {
     case "POST_BOOK":
-      return state = action.payload;
+      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
       break;
   }
 };
@@ -88,19 +90,36 @@ var reducer = function reducer() {
 var store = (0, _redux.createStore)(reducer);
 
 store.subscribe(function () {
-  // console.log(`current state is: ${store.getState()}`)
   console.log('current state is: ', store.getState());
 });
 
 // Creating and dispatching actions
 store.dispatch({
   type: 'POST_BOOK',
-  payload: {
+  payload: [{
     id: 1,
-    title: 'This is the book title',
-    description: 'this is the description',
+    title: 'This is the book title 1',
+    description: '1 this is the description',
     price: 33.33
-  } });
+  }, {
+    id: 2,
+    title: 'This is the book title 2',
+    description: '2 this is the description',
+    price: 66.33
+  }]
+});
+
+// Dispatching a second action
+
+store.dispatch({
+  type: 'POST_BOOK',
+  payload: [{
+    id: 3,
+    title: 'This is the 3rd book title',
+    description: 'This is the description of the third book',
+    price: 33.33
+  }]
+});
 
 /***/ }),
 /* 1 */
