@@ -13,3 +13,10 @@ export function deleteBook(id) {
     payload: id
   }
 }
+
+export function updateBook(book) {
+  return {
+    type: 'UPDATE_BOOK',
+    payload: book
+  }
+}

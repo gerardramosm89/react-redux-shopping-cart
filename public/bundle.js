@@ -109,14 +109,16 @@ store.dispatch((0, _booksActions.postBooks)([{
 store.dispatch((0, _booksActions.deleteBook)({ id: 1 }));
 
 // Action to update
-
-store.dispatch({
-  type: 'UPDATE_BOOK',
-  payload: {
-    id: 2,
-    title: 'Learn Redux'
-  }
-});
+store.dispatch((0, _booksActions.updateBook)({
+  id: 2, title: 'Learn Redux', description: 'Updating the description a second time'
+}));
+// store.dispatch({
+//   type: 'UPDATE_BOOK',
+//   payload: {
+//     id: 2,
+//     title: 'Learn Redux'
+//   }
+// });
 
 store.dispatch((0, _cartActions.addToCart)({
   id: 1,
@@ -1420,6 +1422,7 @@ function booksReducers() {
         return book.id === action.payload.id;
       });
       booksThatWillUpdate[indexToUpdate].title = action.payload.title;
+      booksThatWillUpdate[indexToUpdate].description = action.payload.description;
       return { books: booksThatWillUpdate };
     default:
       return state;
@@ -1486,6 +1489,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.postBooks = postBooks;
 exports.deleteBook = deleteBook;
+exports.updateBook = updateBook;
 function postBooks(book) {
   return {
     type: 'POST_BOOK',
@@ -1497,6 +1501,13 @@ function deleteBook(id) {
   return {
     type: 'DELETE_BOOK',
     payload: id
+  };
+}
+
+function updateBook(book) {
+  return {
+    type: 'UPDATE_BOOK',
+    payload: book
   };
 }
 

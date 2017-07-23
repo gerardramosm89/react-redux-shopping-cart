@@ -5,7 +5,7 @@ import reducers from './reducers/index';
 
 // Import actions intro redux
 import { addToCart } from './actions/cartActions';
-import { postBooks, deleteBook } from './actions/booksActions';
+import { postBooks, deleteBook, updateBook } from './actions/booksActions';
 // Creating the stores
 const store = createStore(reducers);
 
@@ -31,14 +31,17 @@ store.dispatch(postBooks([{
 store.dispatch(deleteBook({ id: 1 }));
 
 // Action to update
-
-store.dispatch({
-  type: 'UPDATE_BOOK',
-  payload: {
-    id: 2,
-    title: 'Learn Redux'
-  }
-});
+store.dispatch(updateBook({ 
+    id: 2, title: 'Learn Redux', description: 'Updating the description a second time' 
+  })
+);
+// store.dispatch({
+//   type: 'UPDATE_BOOK',
+//   payload: {
+//     id: 2,
+//     title: 'Learn Redux'
+//   }
+// });
 
 store.dispatch(
   addToCart({

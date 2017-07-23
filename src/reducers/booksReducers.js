@@ -17,6 +17,7 @@ export function booksReducers(state={books: []}, action) {
         return book.id === action.payload.id;
       });
       booksThatWillUpdate[indexToUpdate].title = action.payload.title;
+      booksThatWillUpdate[indexToUpdate].description = action.payload.description;      
       return { books: booksThatWillUpdate }
     default:
       return state;
