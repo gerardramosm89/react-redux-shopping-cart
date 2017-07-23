@@ -72,54 +72,56 @@
 
 var _redux = __webpack_require__(8);
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _index = __webpack_require__(24);
 
-// Defining reducers
-var reducer = function reducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
-  var action = arguments[1];
+var _index2 = _interopRequireDefault(_index);
 
-  switch (action.type) {
-    case "POST_BOOK":
-      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
-      break;
-  }
-};
+var _cartActions = __webpack_require__(27);
+
+var _booksActions = __webpack_require__(28);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Creating the stores
-var store = (0, _redux.createStore)(reducer);
+
+
+// Import actions intro redux
+var store = (0, _redux.createStore)(_index2.default);
 
 store.subscribe(function () {
   console.log('current state is: ', store.getState());
 });
 
 // Creating and dispatching actions
+store.dispatch((0, _booksActions.postBooks)([{
+  id: 1,
+  title: 'This is the book title 1',
+  description: '1 this is the description',
+  price: 33.33
+}, {
+  id: 2,
+  title: 'This is the book title 2',
+  description: '2 this is the description',
+  price: 66.33
+}]));
+
+// Action to delete
+store.dispatch((0, _booksActions.deleteBook)({ id: 1 }));
+
+// Action to update
+
 store.dispatch({
-  type: 'POST_BOOK',
-  payload: [{
-    id: 1,
-    title: 'This is the book title 1',
-    description: '1 this is the description',
-    price: 33.33
-  }, {
+  type: 'UPDATE_BOOK',
+  payload: {
     id: 2,
-    title: 'This is the book title 2',
-    description: '2 this is the description',
-    price: 66.33
-  }]
+    title: 'Learn Redux'
+  }
 });
 
-// Dispatching a second action
-
-store.dispatch({
-  type: 'POST_BOOK',
-  payload: [{
-    id: 3,
-    title: 'This is the 3rd book title',
-    description: 'This is the description of the third book',
-    price: 33.33
-  }]
-});
+store.dispatch((0, _cartActions.addToCart)({
+  id: 1,
+  bookTitle: 'Hello World'
+}));
 
 /***/ }),
 /* 1 */
@@ -1357,6 +1359,144 @@ function applyMiddleware() {
         dispatch: _dispatch
       });
     };
+  };
+}
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _redux = __webpack_require__(8);
+
+var _booksReducers = __webpack_require__(25);
+
+var _cartReducers = __webpack_require__(26);
+
+exports.default = (0, _redux.combineReducers)({
+  books: _booksReducers.booksReducers,
+  cart: _cartReducers.cartReducers
+});
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.booksReducers = booksReducers;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// Defining reducers
+function booksReducers() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
+  var action = arguments[1];
+
+  switch (action.type) {
+    case "POST_BOOK":
+      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
+      break;
+    case "DELETE_BOOK":
+      var books = [].concat(_toConsumableArray(state.books));
+      var indexToDelete = books.findIndex(function (book) {
+        return book.id === action.payload.id;
+      });
+      books.splice(indexToDelete, 1);
+      return { books: books };
+    case "UPDATE_BOOK":
+      var booksThatWillUpdate = [].concat(_toConsumableArray(state.books));
+      var indexToUpdate = booksThatWillUpdate.findIndex(function (book) {
+        return book.id === action.payload.id;
+      });
+      booksThatWillUpdate[indexToUpdate].title = action.payload.title;
+      return { books: booksThatWillUpdate };
+    default:
+      return state;
+  }
+}
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// let state = { cart: [] };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.cartReducers = cartReducers;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function cartReducers() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { cart: [] };
+  var action = arguments[1];
+
+  switch (action.type) {
+    case "ADD_TO_CART":
+      return { cart: [].concat(_toConsumableArray(state.cart), [action.payload]) };
+    default:
+      return state;
+  }
+}
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// Add to cart
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.addToCart = addToCart;
+function addToCart(book) {
+  return {
+    type: "ADD_TO_CART",
+    payload: book
+  };
+}
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.postBooks = postBooks;
+exports.deleteBook = deleteBook;
+function postBooks(book) {
+  return {
+    type: 'POST_BOOK',
+    payload: book
+  };
+}
+
+function deleteBook(id) {
+  return {
+    type: 'DELETE_BOOK',
+    payload: id
   };
 }
 
