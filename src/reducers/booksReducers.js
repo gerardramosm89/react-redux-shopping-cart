@@ -1,6 +1,23 @@
 // Defining reducers
-export function booksReducers(state={books: []}, action) {
+
+// Initiating state
+let books = { books: [{
+      id: 1,
+      title: 'This is the book title 1', 
+      description: '1 this is the description',
+      price: 33.33
+      }, {
+      id: 2,
+      title: 'This is the book title 2', 
+      description: '2 this is the description',
+      price: 66.33
+      }
+    ]};
+    
+export function booksReducers(state=books, action) {
   switch(action.type) {
+    case "GET_BOOKS":
+      return { ...state, books: [...state.books]}
     case "POST_BOOK":
       return { books: [...state.books, ...action.payload]}
       break;
