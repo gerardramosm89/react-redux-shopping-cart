@@ -72,14 +72,6 @@ class Cart extends Component {
     );
     return (
       <div>
-        <Button
-          bsStyle="primary"
-          bsSize="large"
-          onClick={this.open.bind(this)}
-        >
-          Launch demo modal
-        </Button>
-
         <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
           <Modal.Header closeButton>
             <Modal.Title>Modal heading</Modal.Title>

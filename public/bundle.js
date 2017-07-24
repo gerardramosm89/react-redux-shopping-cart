@@ -43899,15 +43899,6 @@ var Cart = function (_Component) {
         'div',
         null,
         _react2.default.createElement(
-          _reactBootstrap.Button,
-          {
-            bsStyle: 'primary',
-            bsSize: 'large',
-            onClick: this.open.bind(this)
-          },
-          'Launch demo modal'
-        ),
-        _react2.default.createElement(
           _reactBootstrap.Modal,
           { show: this.state.showModal, onHide: this.close.bind(this) },
           _react2.default.createElement(
