@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Panel, Col, Row, Well, Button, ButtonGroup, Label } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
-import { addToCart, deleteCartItem, addQuantityToCartItem } from '../../actions/cartActions';
+import { addToCart, deleteCartItem, addQuantityToCartItem, subtractQuantityToCartItem } from '../../actions/cartActions';
 
 class Cart extends Component {
   handleDelete(_id) {
@@ -11,6 +11,9 @@ class Cart extends Component {
 
   addQuantity(_id) {
     this.props.addQuantityToCartItem(_id);
+  }
+  subtractQuantity(_id) {
+    this.props.subtractQuantityToCartItem(_id);
   }
   renderCart() {
     if (this.props.cart.length === 0) {
@@ -31,7 +34,7 @@ class Cart extends Component {
             </Col>
             <Col xs={6} sm={4}>
               <ButtonGroup style={{ minWidth:'30px'}}>
-                <Button bsStyle='default' bsSize='small'>-</Button>
+                <Button onClick={this.subtractQuantity.bind(this, cartItem._id)} bsStyle='default' bsSize='small'>-</Button>
                 <Button onClick={this.addQuantity.bind(this, cartItem._id)} bsStyle='default' bsSize='small'>+</Button>
                 <span>     </span>
                 <Button onClick={this.handleDelete.bind(this, cartItem._id)} bsStyle='danger' bsSize='small'>Delete</Button>
@@ -63,7 +66,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     deleteCartItem,
-    addQuantityToCartItem
+    addQuantityToCartItem,
+    subtractQuantityToCartItem
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

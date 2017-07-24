@@ -1464,6 +1464,13 @@ function cartReducers() {
       });
       itemsThatWillUpdate[indexToUpdate].quantity += 1;
       return { cart: itemsThatWillUpdate };
+    case 'SUBTRACT_QUANTITY_CART_ITEM':
+      itemsThatWillUpdate = [].concat(_toConsumableArray(state.cart));
+      indexToUpdate = itemsThatWillUpdate.findIndex(function (cartItem) {
+        return cartItem._id == action.payload._id;
+      });
+      if (itemsThatWillUpdate[indexToUpdate].quantity > 0) itemsThatWillUpdate[indexToUpdate].quantity -= 1;
+      return { cart: itemsThatWillUpdate };
     default:
       return state;
   }
@@ -1484,6 +1491,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.addToCart = addToCart;
 exports.deleteCartItem = deleteCartItem;
 exports.addQuantityToCartItem = addQuantityToCartItem;
+exports.subtractQuantityToCartItem = subtractQuantityToCartItem;
 function addToCart(book) {
   return {
     type: "ADD_TO_CART",
@@ -1501,6 +1509,13 @@ function deleteCartItem(_id) {
 function addQuantityToCartItem(_id) {
   return {
     type: 'ADD_QUANTITY_CART_ITEM',
+    payload: { _id: _id }
+  };
+}
+
+function subtractQuantityToCartItem(_id) {
+  return {
+    type: 'SUBTRACT_QUANTITY_CART_ITEM',
     payload: { _id: _id }
   };
 }
@@ -43764,6 +43779,11 @@ var Cart = function (_Component) {
       this.props.addQuantityToCartItem(_id);
     }
   }, {
+    key: 'subtractQuantity',
+    value: function subtractQuantity(_id) {
+      this.props.subtractQuantityToCartItem(_id);
+    }
+  }, {
     key: 'renderCart',
     value: function renderCart() {
       var _this2 = this;
@@ -43822,7 +43842,7 @@ var Cart = function (_Component) {
                   { style: { minWidth: '30px' } },
                   _react2.default.createElement(
                     _reactBootstrap.Button,
-                    { bsStyle: 'default', bsSize: 'small' },
+                    { onClick: _this2.subtractQuantity.bind(_this2, cartItem._id), bsStyle: 'default', bsSize: 'small' },
                     '-'
                   ),
                   _react2.default.createElement(
@@ -43874,7 +43894,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
     deleteCartItem: _cartActions.deleteCartItem,
-    addQuantityToCartItem: _cartActions.addQuantityToCartItem
+    addQuantityToCartItem: _cartActions.addQuantityToCartItem,
+    subtractQuantityToCartItem: _cartActions.subtractQuantityToCartItem
   }, dispatch);
 }
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);

@@ -21,3 +21,10 @@ export function addQuantityToCartItem(_id) {
     payload: { _id }
   }
 }
+
+export function subtractQuantityToCartItem(_id) {
+  return {
+    type: 'SUBTRACT_QUANTITY_CART_ITEM',
+    payload: { _id }
+  }
+}
