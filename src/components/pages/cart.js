@@ -2,17 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Panel, Col, Row, Well, Button, ButtonGroup, Label } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
-import { addToCart, deleteCartItem } from '../../actions/cartActions';
+import { addToCart, deleteCartItem, addQuantityToCartItem } from '../../actions/cartActions';
 
 class Cart extends Component {
   handleDelete(_id) {
-    const indexToDelete = this.props.cart.findIndex(function(cartItem) {
-      return cartItem._id === _id; 
-    });
-    let newCart = this.props.cart;
-    newCart.splice(indexToDelete, 1);
-    this.props.deleteCartItem(newCart);
-    this.forceUpdate();
+    this.props.deleteCartItem(_id);
+  }
+
+  addQuantity(_id) {
+    this.props.addQuantityToCartItem(_id);
   }
   renderCart() {
     if (this.props.cart.length === 0) {
@@ -34,7 +32,7 @@ class Cart extends Component {
             <Col xs={6} sm={4}>
               <ButtonGroup style={{ minWidth:'30px'}}>
                 <Button bsStyle='default' bsSize='small'>-</Button>
-                <Button bsStyle='default' bsSize='small'>+</Button>
+                <Button onClick={this.addQuantity.bind(this, cartItem._id)} bsStyle='default' bsSize='small'>+</Button>
                 <span>     </span>
                 <Button onClick={this.handleDelete.bind(this, cartItem._id)} bsStyle='danger' bsSize='small'>Delete</Button>
               </ButtonGroup>
@@ -64,7 +62,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    deleteCartItem
+    deleteCartItem,
+    addQuantityToCartItem
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

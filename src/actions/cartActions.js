@@ -8,16 +8,16 @@ export function addToCart(book) {
   }
 }
 
-export function deleteCartItem(cart) {
+export function deleteCartItem(_id) {
   return {
     type: 'DELETE_CART_ITEM',
-    payload: cart
+    payload: { _id }
   }
 }
 
-export function updateCartItem(_id) {
+export function addQuantityToCartItem(_id) {
   return {
-    type: 'UPDATE_CART_ITEM',
-    payload: _id
+    type: 'ADD_QUANTITY_CART_ITEM',
+    payload: { _id }
   }
 }

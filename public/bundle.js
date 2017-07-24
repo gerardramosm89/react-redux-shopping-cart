@@ -1448,12 +1448,22 @@ function cartReducers() {
   var action = arguments[1];
 
   switch (action.type) {
-    case "ADD_TO_CART":
+    case 'ADD_TO_CART':
       return { cart: [].concat(_toConsumableArray(state.cart), [action.payload]) };
     case 'DELETE_CART_ITEM':
-      return { cart: action.payload };
-    case 'UPDATE_CART':
-      console.log('current state of cart is: ', state.cart);
+      var indexToDelete = [].concat(_toConsumableArray(state.cart)).findIndex(function (cartItem) {
+        return cartItem._id === action.payload._id;
+      });
+      var deleted = [].concat(_toConsumableArray(state.cart));
+      deleted.splice(indexToDelete, 1);
+      return { cart: deleted };
+    case 'ADD_QUANTITY_CART_ITEM':
+      var itemsThatWillUpdate = [].concat(_toConsumableArray(state.cart));
+      var indexToUpdate = itemsThatWillUpdate.findIndex(function (cartItem) {
+        return cartItem._id == action.payload._id;
+      });
+      itemsThatWillUpdate[indexToUpdate].quantity += 1;
+      return { cart: itemsThatWillUpdate };
     default:
       return state;
   }
@@ -1473,7 +1483,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.addToCart = addToCart;
 exports.deleteCartItem = deleteCartItem;
-exports.updateCartItem = updateCartItem;
+exports.addQuantityToCartItem = addQuantityToCartItem;
 function addToCart(book) {
   return {
     type: "ADD_TO_CART",
@@ -1481,17 +1491,17 @@ function addToCart(book) {
   };
 }
 
-function deleteCartItem(cart) {
+function deleteCartItem(_id) {
   return {
     type: 'DELETE_CART_ITEM',
-    payload: cart
+    payload: { _id: _id }
   };
 }
 
-function updateCartItem(_id) {
+function addQuantityToCartItem(_id) {
   return {
-    type: 'UPDATE_CART_ITEM',
-    payload: _id
+    type: 'ADD_QUANTITY_CART_ITEM',
+    payload: { _id: _id }
   };
 }
 
@@ -43746,13 +43756,12 @@ var Cart = function (_Component) {
   _createClass(Cart, [{
     key: 'handleDelete',
     value: function handleDelete(_id) {
-      var indexToDelete = this.props.cart.findIndex(function (cartItem) {
-        return cartItem._id === _id;
-      });
-      var newCart = this.props.cart;
-      newCart.splice(indexToDelete, 1);
-      this.props.deleteCartItem(newCart);
-      this.forceUpdate();
+      this.props.deleteCartItem(_id);
+    }
+  }, {
+    key: 'addQuantity',
+    value: function addQuantity(_id) {
+      this.props.addQuantityToCartItem(_id);
     }
   }, {
     key: 'renderCart',
@@ -43818,7 +43827,7 @@ var Cart = function (_Component) {
                   ),
                   _react2.default.createElement(
                     _reactBootstrap.Button,
-                    { bsStyle: 'default', bsSize: 'small' },
+                    { onClick: _this2.addQuantity.bind(_this2, cartItem._id), bsStyle: 'default', bsSize: 'small' },
                     '+'
                   ),
                   _react2.default.createElement(
@@ -43864,7 +43873,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    deleteCartItem: _cartActions.deleteCartItem
+    deleteCartItem: _cartActions.deleteCartItem,
+    addQuantityToCartItem: _cartActions.addQuantityToCartItem
   }, dispatch);
 }
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
