@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Col, Row, Well, Button, ButtonGroup, Label } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Tooltip, Modal, Panel, Col, Row, Well, Button, ButtonGroup, Label } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { addToCart, deleteCartItem, addQuantityToCartItem, subtractQuantityToCartItem } from '../../actions/cartActions';
 
 class Cart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false
+    }
+  }
+  close() {
+    this.setState({ showModal: false });
+  }
+
+  open() {
+    this.setState({ showModal: true });
+  }
   handleDelete(_id) {
     this.props.deleteCartItem(_id);
   }
@@ -47,10 +60,58 @@ class Cart extends Component {
     }
   }
   render() {
+    const popover = (
+      <Popover id="modal-popover" title="popover">
+        very popover. such engagement
+      </Popover>
+    );
+    const tooltip = (
+      <Tooltip id="modal-tooltip">
+        wow.
+      </Tooltip>
+    );
     return (
       <div>
+        <Button
+          bsStyle="primary"
+          bsSize="large"
+          onClick={this.open.bind(this)}
+        >
+          Launch demo modal
+        </Button>
+
+        <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Everything in your cart</h4>
+            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+
+            <h4>Popover in a modal</h4>
+            <p>there is a <OverlayTrigger overlay={popover}><a href="#">popover</a></OverlayTrigger> here</p>
+
+            <h4>Tooltips in a modal</h4>
+            <p>there is a <OverlayTrigger overlay={tooltip}><a href="#">tooltip</a></OverlayTrigger> here</p>
+
+            <hr />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close.bind(this)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
         <Panel header='Cart' bsStyle='primary'>
           {this.renderCart()}
+          <Row>
+            <Col xs={12}>
+              <h6>Total amount: </h6>
+              <Button 
+              bsStyle='primary' 
+              bsSize='small'
+              onClick={this.open.bind(this)}
+              >Proceed to checkout</Button>
+            </Col>
+          </Row>
         </Panel>
       </div>
     )

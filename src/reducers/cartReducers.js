@@ -20,7 +20,7 @@ export function cartReducers(state={ cart: [] }, action) {
     case 'SUBTRACT_QUANTITY_CART_ITEM':
       itemsThatWillUpdate = [...state.cart];
       indexToUpdate = itemsThatWillUpdate.findIndex(cartItem => cartItem._id == action.payload._id);
-      if (itemsThatWillUpdate[indexToUpdate].quantity > 0) itemsThatWillUpdate[indexToUpdate].quantity -= 1;
+      if (itemsThatWillUpdate[indexToUpdate].quantity > 1) itemsThatWillUpdate[indexToUpdate].quantity -= 1;
       return { cart: itemsThatWillUpdate }
     default:
       return state;

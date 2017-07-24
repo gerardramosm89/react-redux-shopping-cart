@@ -1469,7 +1469,7 @@ function cartReducers() {
       indexToUpdate = itemsThatWillUpdate.findIndex(function (cartItem) {
         return cartItem._id == action.payload._id;
       });
-      if (itemsThatWillUpdate[indexToUpdate].quantity > 0) itemsThatWillUpdate[indexToUpdate].quantity -= 1;
+      if (itemsThatWillUpdate[indexToUpdate].quantity > 1) itemsThatWillUpdate[indexToUpdate].quantity -= 1;
       return { cart: itemsThatWillUpdate };
     default:
       return state;
@@ -43762,13 +43762,28 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Cart = function (_Component) {
   _inherits(Cart, _Component);
 
-  function Cart() {
+  function Cart(props) {
     _classCallCheck(this, Cart);
 
-    return _possibleConstructorReturn(this, (Cart.__proto__ || Object.getPrototypeOf(Cart)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Cart.__proto__ || Object.getPrototypeOf(Cart)).call(this, props));
+
+    _this.state = {
+      showModal: false
+    };
+    return _this;
   }
 
   _createClass(Cart, [{
+    key: 'close',
+    value: function close() {
+      this.setState({ showModal: false });
+    }
+  }, {
+    key: 'open',
+    value: function open() {
+      this.setState({ showModal: true });
+    }
+  }, {
     key: 'handleDelete',
     value: function handleDelete(_id) {
       this.props.deleteCartItem(_id);
@@ -43870,13 +43885,131 @@ var Cart = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var popover = _react2.default.createElement(
+        _reactBootstrap.Popover,
+        { id: 'modal-popover', title: 'popover' },
+        'very popover. such engagement'
+      );
+      var tooltip = _react2.default.createElement(
+        _reactBootstrap.Tooltip,
+        { id: 'modal-tooltip' },
+        'wow.'
+      );
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
+          _reactBootstrap.Button,
+          {
+            bsStyle: 'primary',
+            bsSize: 'large',
+            onClick: this.open.bind(this)
+          },
+          'Launch demo modal'
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Modal,
+          { show: this.state.showModal, onHide: this.close.bind(this) },
+          _react2.default.createElement(
+            _reactBootstrap.Modal.Header,
+            { closeButton: true },
+            _react2.default.createElement(
+              _reactBootstrap.Modal.Title,
+              null,
+              'Modal heading'
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Modal.Body,
+            null,
+            _react2.default.createElement(
+              'h4',
+              null,
+              'Everything in your cart'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'Duis mollis, est non commodo luctus, nisi erat porttitor ligula.'
+            ),
+            _react2.default.createElement(
+              'h4',
+              null,
+              'Popover in a modal'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'there is a ',
+              _react2.default.createElement(
+                _reactBootstrap.OverlayTrigger,
+                { overlay: popover },
+                _react2.default.createElement(
+                  'a',
+                  { href: '#' },
+                  'popover'
+                )
+              ),
+              ' here'
+            ),
+            _react2.default.createElement(
+              'h4',
+              null,
+              'Tooltips in a modal'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'there is a ',
+              _react2.default.createElement(
+                _reactBootstrap.OverlayTrigger,
+                { overlay: tooltip },
+                _react2.default.createElement(
+                  'a',
+                  { href: '#' },
+                  'tooltip'
+                )
+              ),
+              ' here'
+            ),
+            _react2.default.createElement('hr', null)
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Modal.Footer,
+            null,
+            _react2.default.createElement(
+              _reactBootstrap.Button,
+              { onClick: this.close.bind(this) },
+              'Close'
+            )
+          )
+        ),
+        _react2.default.createElement(
           _reactBootstrap.Panel,
           { header: 'Cart', bsStyle: 'primary' },
-          this.renderCart()
+          this.renderCart(),
+          _react2.default.createElement(
+            _reactBootstrap.Row,
+            null,
+            _react2.default.createElement(
+              _reactBootstrap.Col,
+              { xs: 12 },
+              _react2.default.createElement(
+                'h6',
+                null,
+                'Total amount: '
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Button,
+                {
+                  bsStyle: 'primary',
+                  bsSize: 'small',
+                  onClick: this.open.bind(this)
+                },
+                'Proceed to checkout'
+              )
+            )
+          )
         )
       );
     }
