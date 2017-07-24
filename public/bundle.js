@@ -1386,12 +1386,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 // Initiating state
 var books = { books: [{
-    id: 1,
+    _id: 1,
     title: 'This is the book title 1',
     description: '1 this is the description',
     price: 33.33
   }, {
-    id: 2,
+    _id: 2,
     title: 'This is the book title 2',
     description: '2 this is the description',
     price: 66.33
@@ -1410,14 +1410,14 @@ function booksReducers() {
     case "DELETE_BOOK":
       var _books = [].concat(_toConsumableArray(state.books));
       var indexToDelete = _books.findIndex(function (book) {
-        return book.id === action.payload.id;
+        return book._id === action.payload._id;
       });
       _books.splice(indexToDelete, 1);
       return { books: _books };
     case "UPDATE_BOOK":
       var booksThatWillUpdate = [].concat(_toConsumableArray(state.books));
       var indexToUpdate = booksThatWillUpdate.findIndex(function (book) {
-        return book.id === action.payload.id;
+        return book._id === action.payload._id;
       });
       booksThatWillUpdate[indexToUpdate].title = action.payload.title;
       booksThatWillUpdate[indexToUpdate].description = action.payload.description;
@@ -1439,6 +1439,9 @@ function booksReducers() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.cartReducers = cartReducers;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -1454,6 +1457,8 @@ function cartReducers() {
       (_console = console).log.apply(_console, ['...state is: '].concat(_toConsumableArray(state)));
       console.log('action.payload is: ', action.payload);
       return { cart: [].concat(_toConsumableArray(state.cart), [action.payload]) };
+    case 'DELETE_CART_ITEM':
+      return _extends({}, state, { cart: action.payload });
     default:
       return state;
   }
@@ -1472,10 +1477,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.addToCart = addToCart;
+exports.deleteCartItem = deleteCartItem;
 function addToCart(book) {
   return {
     type: "ADD_TO_CART",
     payload: book
+  };
+}
+
+function deleteCartItem(cart) {
+  return {
+    type: 'DELETE_CART_ITEM',
+    payload: cart
   };
 }
 
@@ -23710,8 +23723,8 @@ var BooksList = function (_Component) {
   }
 
   _createClass(BooksList, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
+    key: 'componentD_idMount',
+    value: function componentD_idMount() {
       this.props.getBooks();
     }
   }, {
@@ -23720,9 +23733,9 @@ var BooksList = function (_Component) {
       return this.props.books.map(function (book) {
         return _react2.default.createElement(
           _reactBootstrap.Col,
-          { xs: 12, sm: 6, md: 4, key: book.id },
+          { xs: 12, sm: 6, md: 4, key: book._id },
           _react2.default.createElement(_bookItem2.default, {
-            id: book.id,
+            _id: book._id,
             title: book.title,
             description: book.description,
             price: book.price
@@ -43507,14 +43520,14 @@ var BookItem = function (_Component) {
     key: 'handleCart',
     value: function handleCart() {
       // const book = [ ...this.props.cart, {
-      //   id: this.props.id,
+      //   _id: this.props._id,
       //   title: this.props.title,
       //   description: this.props.price
       // }];
       // console.log('book is: ', book);
       // this.props.addToCart(...book);
       var book = {
-        id: this.props.id,
+        _id: this.props._id,
         title: this.props.title,
         description: this.props.description,
         price: this.props.price
@@ -43758,6 +43771,53 @@ var Cart = function (_Component) {
                   null,
                   cartItem.title
                 )
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Col,
+                { xs: 12, sm: 2 },
+                _react2.default.createElement(
+                  'h6',
+                  null,
+                  cartItem.price
+                )
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Col,
+                { xs: 12, sm: 2 },
+                _react2.default.createElement(
+                  'h6',
+                  null,
+                  'qty. ',
+                  _react2.default.createElement(_reactBootstrap.Label, { bsStyle: 'success' })
+                )
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Col,
+                { xs: 6, sm: 4 },
+                _react2.default.createElement(
+                  _reactBootstrap.ButtonGroup,
+                  { style: { minWidth: '30px' } },
+                  _react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'default', bsSize: 'small' },
+                    '-'
+                  ),
+                  _react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'default', bsSize: 'small' },
+                    '+'
+                  ),
+                  _react2.default.createElement(
+                    'span',
+                    null,
+                    '     '
+                  ),
+                  _react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'danger', bsSize: 'small' },
+                    'Delete'
+                  )
+                )
               )
             )
           );
@@ -43786,6 +43846,12 @@ function mapStateToProps(state) {
   return {
     cart: state.cart.cart
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    deleteCartItem: _cartActions.deleteCartItem
+  }, dispatch);
 }
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Cart);
 

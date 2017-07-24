@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Col, Row, Well, Button } from 'react-bootstrap';
+import { Panel, Col, Row, Well, Button, ButtonGroup, Label } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
-import { addToCart } from '../../actions/cartActions';
+import { addToCart, deleteCartItem } from '../../actions/cartActions';
 
 class Cart extends Component {
   renderCart() {
@@ -15,6 +15,20 @@ class Cart extends Component {
           <Row>
             <Col xs={12} sm={4}>
               <h6>{cartItem.title}</h6>
+            </Col>
+            <Col xs={12} sm={2}>
+              <h6>{cartItem.price}</h6>
+            </Col>
+            <Col xs={12} sm={2}>
+              <h6>qty. <Label bsStyle='success'></Label></h6>
+            </Col>
+            <Col xs={6} sm={4}>
+              <ButtonGroup style={{ minWidth:'30px'}}>
+                <Button bsStyle='default' bsSize='small'>-</Button>
+                <Button bsStyle='default' bsSize='small'>+</Button>
+                <span>     </span>
+                <Button bsStyle='danger' bsSize='small'>Delete</Button>
+              </ButtonGroup>
             </Col>
           </Row>
         </Panel>
@@ -37,5 +51,11 @@ function mapStateToProps(state) {
   return {
     cart: state.cart.cart
   }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    deleteCartItem
+  }, dispatch);
 }
 export default connect(mapStateToProps)(Cart);
