@@ -43658,6 +43658,7 @@ var BooksForm = function (_Component) {
     value: function handleSubmit() {
       console.log((0, _reactDom.findDOMNode)(this.refs.title).value);
       var book = [{
+        _id: this.props.books.length + 2,
         title: (0, _reactDom.findDOMNode)(this.refs.title).value,
         description: (0, _reactDom.findDOMNode)(this.refs.description).value,
         price: (0, _reactDom.findDOMNode)(this.refs.price).value
@@ -43720,11 +43721,17 @@ var BooksForm = function (_Component) {
   return BooksForm;
 }(_react.Component);
 
+function mapStateToProps(state) {
+  return {
+    books: state.books.books
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({ postBooks: _booksActions.postBooks }, dispatch);
 }
 
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(BooksForm);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksForm);
 
 /***/ }),
 /* 489 */
@@ -43813,7 +43820,7 @@ var Cart = function (_Component) {
         return this.props.cart.map(function (cartItem) {
           return _react2.default.createElement(
             _reactBootstrap.Panel,
-            { key: cartItem.title },
+            { key: cartItem._id },
             _react2.default.createElement(
               _reactBootstrap.Row,
               null,

@@ -34,7 +34,7 @@ class Cart extends Component {
     } else {
       return this.props.cart.map(cartItem => {
         return(
-        <Panel key={cartItem.title}>
+        <Panel key={cartItem._id}>
           <Row>
             <Col xs={12} sm={4}>
               <h6>{cartItem.title}</h6>

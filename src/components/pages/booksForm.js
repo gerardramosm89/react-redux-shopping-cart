@@ -13,6 +13,7 @@ class BooksForm extends Component {
   handleSubmit() {
     console.log(findDOMNode(this.refs.title).value);
     let book = [{
+      _id: this.props.books.length + 2,
       title: findDOMNode(this.refs.title).value,
       description: findDOMNode(this.refs.description).value,
       price: findDOMNode(this.refs.price).value,
@@ -50,8 +51,14 @@ class BooksForm extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    books: state.books.books
+  }
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ postBooks }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(BooksForm);
+export default connect(mapStateToProps, mapDispatchToProps)(BooksForm);
