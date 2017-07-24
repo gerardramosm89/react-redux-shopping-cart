@@ -1,0 +1,1 @@
+# A simple react-redux shopping cart application!
