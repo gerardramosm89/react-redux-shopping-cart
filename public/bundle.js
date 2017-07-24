@@ -1439,26 +1439,21 @@ function booksReducers() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 exports.cartReducers = cartReducers;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function cartReducers() {
-  var _console;
-
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { cart: [] };
   var action = arguments[1];
 
   switch (action.type) {
     case "ADD_TO_CART":
-      (_console = console).log.apply(_console, ['...state is: '].concat(_toConsumableArray(state)));
-      console.log('action.payload is: ', action.payload);
       return { cart: [].concat(_toConsumableArray(state.cart), [action.payload]) };
     case 'DELETE_CART_ITEM':
-      return _extends({}, state, { cart: action.payload });
+      return { cart: action.payload };
+    case 'UPDATE_CART':
+      console.log('current state of cart is: ', state.cart);
     default:
       return state;
   }
@@ -1478,6 +1473,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.addToCart = addToCart;
 exports.deleteCartItem = deleteCartItem;
+exports.updateCartItem = updateCartItem;
 function addToCart(book) {
   return {
     type: "ADD_TO_CART",
@@ -1489,6 +1485,13 @@ function deleteCartItem(cart) {
   return {
     type: 'DELETE_CART_ITEM',
     payload: cart
+  };
+}
+
+function updateCartItem(_id) {
+  return {
+    type: 'UPDATE_CART_ITEM',
+    payload: _id
   };
 }
 
@@ -43519,18 +43522,12 @@ var BookItem = function (_Component) {
   _createClass(BookItem, [{
     key: 'handleCart',
     value: function handleCart() {
-      // const book = [ ...this.props.cart, {
-      //   _id: this.props._id,
-      //   title: this.props.title,
-      //   description: this.props.price
-      // }];
-      // console.log('book is: ', book);
-      // this.props.addToCart(...book);
       var book = {
         _id: this.props._id,
         title: this.props.title,
         description: this.props.description,
-        price: this.props.price
+        price: this.props.price,
+        quantity: 1
       };
       this.props.addToCart(book);
     }
@@ -43747,8 +43744,21 @@ var Cart = function (_Component) {
   }
 
   _createClass(Cart, [{
+    key: 'handleDelete',
+    value: function handleDelete(_id) {
+      var indexToDelete = this.props.cart.findIndex(function (cartItem) {
+        return cartItem._id === _id;
+      });
+      var newCart = this.props.cart;
+      newCart.splice(indexToDelete, 1);
+      this.props.deleteCartItem(newCart);
+      this.forceUpdate();
+    }
+  }, {
     key: 'renderCart',
     value: function renderCart() {
+      var _this2 = this;
+
       if (this.props.cart.length === 0) {
         return _react2.default.createElement(
           'div',
@@ -43788,7 +43798,11 @@ var Cart = function (_Component) {
                   'h6',
                   null,
                   'qty. ',
-                  _react2.default.createElement(_reactBootstrap.Label, { bsStyle: 'success' })
+                  _react2.default.createElement(
+                    _reactBootstrap.Label,
+                    { bsStyle: 'success' },
+                    cartItem.quantity
+                  )
                 )
               ),
               _react2.default.createElement(
@@ -43814,7 +43828,7 @@ var Cart = function (_Component) {
                   ),
                   _react2.default.createElement(
                     _reactBootstrap.Button,
-                    { bsStyle: 'danger', bsSize: 'small' },
+                    { onClick: _this2.handleDelete.bind(_this2, cartItem._id), bsStyle: 'danger', bsSize: 'small' },
                     'Delete'
                   )
                 )
@@ -43853,7 +43867,7 @@ function mapDispatchToProps(dispatch) {
     deleteCartItem: _cartActions.deleteCartItem
   }, dispatch);
 }
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(Cart);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
 
 /***/ })
 /******/ ]);

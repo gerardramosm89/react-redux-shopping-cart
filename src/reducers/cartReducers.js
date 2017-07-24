@@ -4,11 +4,11 @@
 export function cartReducers(state={ cart: [] }, action) {
   switch(action.type) {
     case "ADD_TO_CART":
-      console.log('...state is: ', ...state);
-      console.log('action.payload is: ', action.payload);
       return { cart: [...state.cart, action.payload]};
     case 'DELETE_CART_ITEM':
-      return {...state, cart: action.payload}
+      return { cart: action.payload }
+    case 'UPDATE_CART':
+      console.log('current state of cart is: ', state.cart);
     default:
       return state;
   }

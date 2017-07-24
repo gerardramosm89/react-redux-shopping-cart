@@ -5,6 +5,15 @@ import { bindActionCreators } from 'redux';
 import { addToCart, deleteCartItem } from '../../actions/cartActions';
 
 class Cart extends Component {
+  handleDelete(_id) {
+    const indexToDelete = this.props.cart.findIndex(function(cartItem) {
+      return cartItem._id === _id; 
+    });
+    let newCart = this.props.cart;
+    newCart.splice(indexToDelete, 1);
+    this.props.deleteCartItem(newCart);
+    this.forceUpdate();
+  }
   renderCart() {
     if (this.props.cart.length === 0) {
       return <div>cart is empty</div>
@@ -20,14 +29,14 @@ class Cart extends Component {
               <h6>{cartItem.price}</h6>
             </Col>
             <Col xs={12} sm={2}>
-              <h6>qty. <Label bsStyle='success'></Label></h6>
+              <h6>qty. <Label bsStyle='success'>{cartItem.quantity}</Label></h6>
             </Col>
             <Col xs={6} sm={4}>
               <ButtonGroup style={{ minWidth:'30px'}}>
                 <Button bsStyle='default' bsSize='small'>-</Button>
                 <Button bsStyle='default' bsSize='small'>+</Button>
                 <span>     </span>
-                <Button bsStyle='danger' bsSize='small'>Delete</Button>
+                <Button onClick={this.handleDelete.bind(this, cartItem._id)} bsStyle='danger' bsSize='small'>Delete</Button>
               </ButtonGroup>
             </Col>
           </Row>
@@ -58,4 +67,4 @@ function mapDispatchToProps(dispatch) {
     deleteCartItem
   }, dispatch);
 }
-export default connect(mapStateToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
