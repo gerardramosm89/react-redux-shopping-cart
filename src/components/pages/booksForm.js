@@ -11,7 +11,6 @@ class BooksForm extends Component {
     super(props);
   }
   handleSubmit() {
-    console.log(findDOMNode(this.refs.title).value);
     let book = [{
       _id: this.props.books.length + 2,
       title: findDOMNode(this.refs.title).value,

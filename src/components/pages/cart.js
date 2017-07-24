@@ -59,6 +59,13 @@ class Cart extends Component {
       });
     }
   }
+  grabTotal() {
+    let total = 0;
+    this.props.cart.map(cartItem => total += cartItem.quantity * cartItem.price);
+    return(
+      <h4>{total}</h4>
+    );
+  }
   render() {
     const popover = (
       <Popover id="modal-popover" title="popover">
@@ -70,21 +77,23 @@ class Cart extends Component {
         wow.
       </Tooltip>
     );
+    let total = 0;
+    this.props.cart.map(cartItem => total += cartItem.quantity * cartItem.price);
     return (
       <div>
         <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Checkout:</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <h4>Everything in your cart</h4>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-
-            <h4>Popover in a modal</h4>
+            <h3>Total:</h3>
+            {total.toFixed(2)}
+            {/* <h4>Popover in a modal</h4>
             <p>there is a <OverlayTrigger overlay={popover}><a href="#">popover</a></OverlayTrigger> here</p>
 
             <h4>Tooltips in a modal</h4>
-            <p>there is a <OverlayTrigger overlay={tooltip}><a href="#">tooltip</a></OverlayTrigger> here</p>
+            <p>there is a <OverlayTrigger overlay={tooltip}><a href="#">tooltip</a></OverlayTrigger> here</p> */}
 
             <hr />
           </Modal.Body>
@@ -96,7 +105,7 @@ class Cart extends Component {
           {this.renderCart()}
           <Row>
             <Col xs={12}>
-              <h6>Total amount: </h6>
+              <h6>Total amount: {total.toFixed(2)}</h6>
               <Button 
               bsStyle='primary' 
               bsSize='small'

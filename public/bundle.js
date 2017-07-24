@@ -43547,6 +43547,8 @@ var BookItem = function (_Component) {
   _createClass(BookItem, [{
     key: 'handleCart',
     value: function handleCart() {
+      var _this2 = this;
+
       var book = {
         _id: this.props._id,
         title: this.props.title,
@@ -43554,7 +43556,10 @@ var BookItem = function (_Component) {
         price: this.props.price,
         quantity: 1
       };
-      this.props.addToCart(book);
+      var cartItemIndex = this.props.cart.findIndex(function (cartItem) {
+        return cartItem._id == _this2.props._id;
+      });
+      if (cartItemIndex < 0) this.props.addToCart(book);else this.props.addQuantityToCartItem(this.props._id);
     }
   }, {
     key: 'render',
@@ -43604,7 +43609,7 @@ function mapStateToProps(state) {
   };
 }
 function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({ addToCart: _cartActions.addToCart }, dispatch);
+  return (0, _redux.bindActionCreators)({ addToCart: _cartActions.addToCart, addQuantityToCartItem: _cartActions.addQuantityToCartItem }, dispatch);
 }
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BookItem);
@@ -43656,7 +43661,6 @@ var BooksForm = function (_Component) {
   _createClass(BooksForm, [{
     key: 'handleSubmit',
     value: function handleSubmit() {
-      console.log((0, _reactDom.findDOMNode)(this.refs.title).value);
       var book = [{
         _id: this.props.books.length + 2,
         title: (0, _reactDom.findDOMNode)(this.refs.title).value,
@@ -43890,6 +43894,19 @@ var Cart = function (_Component) {
       }
     }
   }, {
+    key: 'grabTotal',
+    value: function grabTotal() {
+      var total = 0;
+      this.props.cart.map(function (cartItem) {
+        return total += cartItem.quantity * cartItem.price;
+      });
+      return _react2.default.createElement(
+        'h4',
+        null,
+        total
+      );
+    }
+  }, {
     key: 'render',
     value: function render() {
       var popover = _react2.default.createElement(
@@ -43902,6 +43919,10 @@ var Cart = function (_Component) {
         { id: 'modal-tooltip' },
         'wow.'
       );
+      var total = 0;
+      this.props.cart.map(function (cartItem) {
+        return total += cartItem.quantity * cartItem.price;
+      });
       return _react2.default.createElement(
         'div',
         null,
@@ -43914,7 +43935,7 @@ var Cart = function (_Component) {
             _react2.default.createElement(
               _reactBootstrap.Modal.Title,
               null,
-              'Modal heading'
+              'Checkout:'
             )
           ),
           _react2.default.createElement(
@@ -43926,50 +43947,11 @@ var Cart = function (_Component) {
               'Everything in your cart'
             ),
             _react2.default.createElement(
-              'p',
+              'h3',
               null,
-              'Duis mollis, est non commodo luctus, nisi erat porttitor ligula.'
+              'Total:'
             ),
-            _react2.default.createElement(
-              'h4',
-              null,
-              'Popover in a modal'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'there is a ',
-              _react2.default.createElement(
-                _reactBootstrap.OverlayTrigger,
-                { overlay: popover },
-                _react2.default.createElement(
-                  'a',
-                  { href: '#' },
-                  'popover'
-                )
-              ),
-              ' here'
-            ),
-            _react2.default.createElement(
-              'h4',
-              null,
-              'Tooltips in a modal'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'there is a ',
-              _react2.default.createElement(
-                _reactBootstrap.OverlayTrigger,
-                { overlay: tooltip },
-                _react2.default.createElement(
-                  'a',
-                  { href: '#' },
-                  'tooltip'
-                )
-              ),
-              ' here'
-            ),
+            total.toFixed(2),
             _react2.default.createElement('hr', null)
           ),
           _react2.default.createElement(
@@ -43995,7 +43977,8 @@ var Cart = function (_Component) {
               _react2.default.createElement(
                 'h6',
                 null,
-                'Total amount: '
+                'Total amount: ',
+                total.toFixed(2)
               ),
               _react2.default.createElement(
                 _reactBootstrap.Button,

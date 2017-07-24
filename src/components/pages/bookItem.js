@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Row, Col, Well, Button } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
-import { addToCart } from '../../actions/cartActions';
+import { addToCart, addQuantityToCartItem } from '../../actions/cartActions';
 
 class BookItem extends Component {
 
@@ -15,7 +15,9 @@ class BookItem extends Component {
       price: this.props.price,
       quantity: 1
     };
-    this.props.addToCart(book);
+    let cartItemIndex = this.props.cart.findIndex(cartItem => cartItem._id == this.props._id);
+    if (cartItemIndex < 0) this.props.addToCart(book);
+    else this.props.addQuantityToCartItem(this.props._id);
   }
   render() {
     return (
@@ -39,7 +41,7 @@ function mapStateToProps(state) {
   }
 }
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addToCart }, dispatch)
+  return bindActionCreators({ addToCart, addQuantityToCartItem }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookItem);
