@@ -3,12 +3,12 @@
 // Initiating state
 let books = { books: [{
       _id: 1,
-      title: 'This is the book title 1', 
+      title: 'Harry Potter and the Goblet of Fire', 
       description: '1 this is the description',
       price: 33.33
       }, {
       _id: 2,
-      title: 'This is the book title 2', 
+      title: 'The Grapes of Wrath', 
       description: '2 this is the description',
       price: 66.33
       }
@@ -24,7 +24,7 @@ export function booksReducers(state=books, action) {
     case "DELETE_BOOK":
       const books = [...state.books];
       const indexToDelete = books.findIndex((book) => {
-        return book._id === action.payload._id;
+        return book._id == action.payload._id;
       });
       books.splice(indexToDelete, 1);
       return { books }
