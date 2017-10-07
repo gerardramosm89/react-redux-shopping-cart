@@ -2,9 +2,10 @@
 
 // Add to cart
 export function addToCart(book) {
+  let quantityToAdd = 1;
   return {
     type: "ADD_TO_CART",
-    payload: book
+    payload: { book, quantityToAdd }
   }
 }
 

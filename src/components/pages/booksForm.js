@@ -1,7 +1,19 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 
-import { Well, Panel, FormControl, FormGroup, ControlLabel, Button } from 'react-bootstrap';
+import {
+  MenuItem,
+  InputGroup,
+  Row,
+  Image,
+  Col,
+  Well,
+  Panel,
+  FormControl,
+  FormGroup,
+  ControlLabel,
+  Button,
+  DropdownButton } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { postBooks, deleteBook } from '../../actions/booksActions';
@@ -35,39 +47,58 @@ class BooksForm extends Component {
   render() {
     return(
       <Well>
-        <Panel>
-          <FormGroup controlId='title'>
-            <ControlLabel>Title</ControlLabel>
-            <FormControl 
-              type='text'
-              placeholder='Enter Title'
-              ref='title'
-            />
-            <ControlLabel>Description</ControlLabel>            
-            <FormControl 
-              type='text'
-              placeholder='Enter description'
-              ref='description'
-            />
-            <ControlLabel>Price</ControlLabel>            
-            <FormControl 
+        <Row>
+          <Col>
+            <Panel>
+              <InputGroup>
+                <FormControl type="text" />
+                  <DropdownButton
+                    componentClass={InputGroup.Button}
+                    id="input-dropdown-addon"
+                    title="Select an image"
+                  >
+                  {/* <MenuItem key="1">Item</MenuItem> */}
+                </DropdownButton>
+              </InputGroup>
+              <Image src="" responsive/>
+            </Panel>
+          </Col>
+          <Col>
+            <Panel>
+            <FormGroup controlId='title'>
+              <ControlLabel>Title</ControlLabel>
+              <FormControl 
                 type='text'
-                placeholder='Enter price'
-                ref='price'
+                placeholder='Enter Title'
+                ref='title'
               />
-          </FormGroup>
-          <Button onClick={this.handleSubmit.bind(this)} bsStyle='primary'>Save</Button>
-        </Panel>
-        <Panel style={{marginTop: '25px'}}>
-          <FormGroup controlId="formControlsSelect">
-            <ControlLabel>Select a book to delete</ControlLabel>
-            <FormControl ref="delete" componentClass="select" placeholder="select">
-              <option value="select">select</option>
-              {this.renderBooks()}
-            </FormControl>
-          </FormGroup>
-          <Button onClick={this.onDelete.bind(this)} bsStyle="danger">Delete Book</Button>
-        </Panel>
+              <ControlLabel>Description</ControlLabel>            
+              <FormControl 
+                type='text'
+                placeholder='Enter description'
+                ref='description'
+              />
+              <ControlLabel>Price</ControlLabel>            
+              <FormControl 
+                  type='text'
+                  placeholder='Enter price'
+                  ref='price'
+                />
+            </FormGroup>
+            <Button onClick={this.handleSubmit.bind(this)} bsStyle='primary'>Save</Button>
+          </Panel>
+          <Panel style={{marginTop: '25px'}}>
+            <FormGroup controlId="formControlsSelect">
+              <ControlLabel>Select a book to delete</ControlLabel>
+              <FormControl ref="delete" componentClass="select" placeholder="select">
+                <option value="select">select</option>
+                {this.renderBooks()}
+              </FormControl>
+            </FormGroup>
+            <Button onClick={this.onDelete.bind(this)} bsStyle="danger">Delete Book</Button>
+          </Panel>
+          </Col>
+        </Row>
       </Well>
     );
   }
