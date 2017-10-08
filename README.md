@@ -24,3 +24,7 @@ Features include
 4) Being able to delete from the books list
 5) Incrementing or decrementing quantity of books already in the card
 6) Popup modal showing the totals of everything in cart
+7) Cart badge follows how much quantity is in your cart
+
+#### Short Demo:
+![redux-cart](https://github.com/gerardramosm89/react-redux-shopping-cart/blob/master/public/images/cart.gif?raw=true)
