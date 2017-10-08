@@ -34,7 +34,7 @@ class Menu extends Component {
 function mapStateToProps(state) {
   console.log(state);
   return {
-    totalCartQuantity: state.cart.cart.length
+    totalCartQuantity: state.cart.cartQuantity
   }
 }
 
