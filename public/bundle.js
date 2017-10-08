@@ -32577,8 +32577,6 @@ function booksReducers() {
 "use strict";
 
 
-// let state = { cart: [] };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });

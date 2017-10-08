@@ -1,6 +1,5 @@
 "use strict"
 
-// let state = { cart: [] };
 export function cartReducers(state={ cart: [], cartQuantity: 0 }, action) {
   let newQuantity;
   switch(action.type) {
