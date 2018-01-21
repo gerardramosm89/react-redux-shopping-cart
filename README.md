@@ -5,9 +5,11 @@ run
 ```
 npm install
 ```
-run 
+This assumes that webpack is installed globally. After running `npm install` and if you get a "webpack command not found" or something similar. try `sudo npm install -g webpack`, it should install and webpack should run properly.
+
+then run
 ```
-webpack, this assumes that webpack is installed globally. After running `npm install` and if you get a "webpack command not found" or something similar. try `sudo npm install -g webpack`, it should install and webpack should run proprely
+webpack
 ```
 to build the bundle.js, then run 
 ```
